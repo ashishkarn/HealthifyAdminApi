@@ -5,6 +5,7 @@ import { HttpError } from "./utils"
 import * as jwt from "jsonwebtoken"
 import { getSettings } from "../config"
 import { findUserByUsername } from "../auth/auth.service"
+import { logger } from "../config/logger"
 
 export const getBodyValidator: (schema: z.ZodTypeAny) => Koa.Middleware = (
   schema: z.ZodTypeAny
@@ -41,6 +42,13 @@ export const globalErrorHandler: Koa.Middleware = async (ctx, next) => {
         data: err.data
       }
     }
+  }
+  finally{
+    const method = ctx.method
+    const time = new Date(Date.now());
+    const responseStatus = ctx.status ? ctx.status : 200
+    const responsePayload = ctx.body ? JSON.stringify(ctx.body) : {}
+    logger.info(`${time.toLocaleString("en-US", {timeZone: "Asia/Kolkata"})}: ${method} | ${responseStatus} | ${responsePayload}`)
   }
 }
 
