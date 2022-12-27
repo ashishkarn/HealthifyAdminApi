@@ -6,6 +6,7 @@ import * as jwt from "jsonwebtoken"
 import { getSettings } from "../config"
 import { findUserByUsername } from "../auth/auth.service"
 import { logger } from "../config/logger"
+import { ZodError } from "zod"
 
 export const getBodyValidator: (schema: z.ZodTypeAny) => Koa.Middleware = (
   schema: z.ZodTypeAny
@@ -42,13 +43,16 @@ export const globalErrorHandler: Koa.Middleware = async (ctx, next) => {
         data: err.data
       }
     }
-  }
-  finally{
+  } finally {
     const method = ctx.method
-    const time = new Date(Date.now());
+    const time = new Date(Date.now())
     const responseStatus = ctx.status ? ctx.status : 200
     const responsePayload = ctx.body ? JSON.stringify(ctx.body) : {}
-    logger.info(`${time.toLocaleString("en-US", {timeZone: "Asia/Kolkata"})}: ${method} | ${responseStatus} | ${responsePayload}`)
+    logger.info(
+      `${time.toLocaleString("en-US", {
+        timeZone: "Asia/Kolkata"
+      })}: ${method} | ${responseStatus} | ${responsePayload}`
+    )
   }
 }
 
@@ -69,7 +73,7 @@ export const authenticateBearer: Koa.Middleware = async (ctx, next) => {
     ctx.user = user
     await next()
   } catch (err) {
-    throw new HttpError("Unauthorized access. Invalid token.", 401)
+    throw err
   }
   await next()
 }
