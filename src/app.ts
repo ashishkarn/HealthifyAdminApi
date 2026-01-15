@@ -1,10 +1,10 @@
-import * as Koa from "koa"
-import * as bodyParser from "koa-bodyparser"
-import * as Router from "koa-router"
+import Koa from "koa"
+import bodyParser from "koa-bodyparser"
+import Router from "@koa/router"
 import { globalErrorHandler } from "./utils/middleware"
 import { router as restaurantsRouter } from "./restaurant/api/restaurants.router"
 import { router as authRouter } from "./auth/api/auth.router"
-import * as cors from "@koa/cors"
+import cors from "@koa/cors"
 
 export const app = new Koa()
 

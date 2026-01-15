@@ -1,4 +1,4 @@
-import * as Router from "koa-router"
+import Router from "@koa/router"
 import { pipeline as getAllRestaurants } from "./get-all-restaurants"
 import { pipeline as getUserWorkload } from "./get-user-workload"
 import { pipeline as getRestaurantByPlaceId } from "./get-restaurant-by-placeId"

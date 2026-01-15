@@ -6,7 +6,6 @@ import * as jwt from "jsonwebtoken"
 import { getSettings } from "../config"
 import { findUserByUsername } from "../auth/auth.service"
 import { logger } from "../config/logger"
-import { ZodError } from "zod"
 
 export const getBodyValidator: (schema: z.ZodTypeAny) => Koa.Middleware = (
   schema: z.ZodTypeAny
@@ -62,15 +61,15 @@ export const authenticateBearer: Koa.Middleware = async (ctx, next) => {
     throw new HttpError("Unauthorized access. Empty token.", 401)
   }
   const token = bearerToken.substring(7, bearerToken.length)
-  const secret = getSettings().JWT_SECRET
+  const secret = getSettings()["JWT_SECRET"]
   try {
     const decodedUser = jwt.verify(token, secret) as jwt.JwtPayload
-    const user = await findUserByUsername(decodedUser.username)
+    const user = await findUserByUsername(decodedUser["username"])
     if (R.isNil(user)) {
       throw new HttpError("No corresponding user found", 401)
     }
-    delete user.password
-    ctx.user = user
+    delete user["password"]
+    ctx["user"] = user
     await next()
   } catch (err) {
     throw err

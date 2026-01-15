@@ -1,12 +1,12 @@
 import * as Koa from "koa"
-import * as compose from "koa-compose"
+import compose from "koa-compose"
 import { findByPlaceId } from "../restaurants.service"
 import * as R from "ramda"
 import { HttpError } from "../../utils/utils"
 
-const controller: Koa.Middleware = async (ctx, next) => {
-  const params = ctx.params
-  const result = await findByPlaceId(params.restaurantName)
+const controller: Koa.Middleware = async (ctx, _next) => {
+  const params = ctx["params"]
+  const result = await findByPlaceId(params["restaurantName"])
   if (R.isNil(result)) {
     throw new HttpError("Restaurant not found", 400)
   }

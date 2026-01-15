@@ -13,6 +13,7 @@ let settings: IConfig
 
 const setupEnv = () => {
   const envPath = path.resolve(__dirname, "../../environment/.env")
+  logger.info("Loading env file from: " + envPath)
   dotenv.config({
     path: envPath
   })
@@ -20,7 +21,7 @@ const setupEnv = () => {
 
 export const configure = (): IConfig => {
   setupEnv()
-  logger.info("Environment Detected: " + process.env.NODE_ENV)
+  logger.info("Environment Detected: " + process.env["NODE_ENV"])
 
   settings = makeEnvSettings(process.env)
   return settings
@@ -32,10 +33,10 @@ export const getSettings = () => {
 
 const makeEnvSettings = (env: NodeJS.ProcessEnv): IConfig => {
   const config = {
-    NODE_ENV: env.NODE_ENV,
-    MONGO_DB_URI: env.MONGO_DB_URI,
-    PORT: Number(env.PORT),
-    JWT_SECRET: env.JWT_SECRET
+    NODE_ENV: env["NODE_ENV"],
+    MONGO_DB_URI: env["MONGO_DB_URI"],
+    PORT: Number(env["PORT"]),
+    JWT_SECRET: env["JWT_SECRET"]
   }
   return config as IConfig
 }

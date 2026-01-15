@@ -1,8 +1,8 @@
 export enum COLLECTION {
   RESTAURANTS = "restaurants",
-  USER = "user"
+  USER = "users"
 }
 
 export enum DB {
-  HEALTHIFY = "healthify"
+  HEALTHIFY = "healthifyadmin"
 }

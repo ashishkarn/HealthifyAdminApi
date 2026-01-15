@@ -52,9 +52,9 @@ export const updateRestaurantStatus = async (
   const updateObj =
     updateRestaurantStatusObj as Partial<IUpdateRestaurantStatus>
   delete updateObj.placeId
-  const finalStatusObj = R.isNil(restaurant.surveyStatus)
+  const finalStatusObj = R.isNil(restaurant["surveyStatus"])
     ? updateObj
-    : R.mergeDeepRight(restaurant.surveyStatus, updateObj)
+    : R.mergeDeepRight(restaurant["surveyStatus"], updateObj)
   const collection = await db.getCollection(
     COLLECTION.RESTAURANTS,
     DB.HEALTHIFY
@@ -77,5 +77,8 @@ export const updateRestaurantStatus = async (
       returnDocument: "after"
     }
   )
-  return result.value
+  if (!result) {
+    throw new HttpError("Failed to update restaurant", 500)
+  }
+  return result["value"]
 }

@@ -25,10 +25,12 @@ export const setDbNameToDbMap = (dbName: DB, db: mongo.Db) => {
 }
 
 export const getDbFromDbName = (dbName: DB): mongo.Db => {
-  if (!dbs[dbName]) {
+  const db = dbs[dbName]
+  if (!db) {
     logger.error(`Db with name: ${dbName} not found`)
+    throw new Error(`Db with name: ${dbName} not found`)
   }
-  return dbs[dbName]
+  return db
 }
 
 export const getCollection = async (

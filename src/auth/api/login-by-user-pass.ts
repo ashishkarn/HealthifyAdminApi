@@ -1,5 +1,5 @@
 import * as Koa from "koa"
-import * as compose from "koa-compose"
+import compose from "koa-compose"
 import * as R from "ramda"
 import { HttpError } from "../../utils/utils"
 import { findUserByUsernamePassword } from "../auth.service"
@@ -11,7 +11,7 @@ interface IAuth {
   password: string
 }
 
-const controller: Koa.Middleware = async (ctx, next) => {
+const controller: Koa.Middleware = async (ctx, _next) => {
   const { username, password } = ctx.request.body as IAuth
   if (R.isNil(username) || R.isNil(password)) {
     throw new HttpError("Username and password cannot be empty", 401)
@@ -21,8 +21,8 @@ const controller: Koa.Middleware = async (ctx, next) => {
     throw new HttpError("Invalid Username and password", 404)
   }
   const token = jwt.sign(
-    { username: user.username },
-    getSettings().JWT_SECRET,
+    { username: user["username"] },
+    getSettings()["JWT_SECRET"],
     {
       expiresIn: "4h"
     }
